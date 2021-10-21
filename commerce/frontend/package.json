@@ -1,0 +1,34 @@
+{
+  "name": "frontend",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "serve": "vue-cli-service serve",
+    "build": "vue-cli-service build"
+  },
+  "dependencies": {
+    "axios": "^0.21.1",
+    "bulma": "^0.9.3",
+    "bulma-extensions": "^6.2.7",
+    "bulma-toast": "^2.3.1",
+    "core-js": "^3.6.5",
+    "correios-brasil": "^2.2.2",
+    "three": "^0.132.2",
+    "vue": "^3.0.0",
+    "vue-router": "^4.0.0-0",
+    "vue-slider-component": "^3.2.14",
+    "vue-social-chat": "^1.0.0",
+    "vue-viacep": "^1.0.4",
+    "vuex": "^4.0.0-0",
+    "webpack": "^4.46.0"
+  },
+  "devDependencies": {
+    "@vue/cli-plugin-babel": "~4.5.0",
+    "@vue/cli-plugin-router": "~4.5.0",
+    "@vue/cli-plugin-vuex": "~4.5.0",
+    "@vue/cli-service": "~4.5.0",
+    "@vue/compiler-sfc": "^3.0.0",
+    "sass": "^1.26.5",
+    "sass-loader": "^8.0.2"
+  }
+}
