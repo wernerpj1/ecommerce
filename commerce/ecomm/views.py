@@ -17,8 +17,11 @@ def buscarCep(request):
     cep = request.GET.get("cep")
     tipo = request.GET.get("tipo")
     peso = request.GET.get("peso")
+    altura = request.GET.get("altura")
+    largura = request.GET.get("largura")
+    comprimento = request.GET.get("comprimento")
     if cep:
-        url = ('http://ws.correios.com.br/calculador/CalcPrecoPrazo.aspx?sCepOrigem=80410220&sCepDestino='+str(cep)+'&nVlPeso='+str(peso)+'&nCdFormato=1&nVlComprimento=20&nVlAltura=20&nVlLargura=20&nVlDiametro=0&nCdServico='+str(tipo)+'&nCdEmpresa=&sDsSenha=&sCdMaoPropria=s&nVlValorDeclarado=0&sCdAvisoRecebimento=s&StrRetorno=xml&nIndicaCalculo=3')
+        url = ('http://ws.correios.com.br/calculador/CalcPrecoPrazo.aspx?sCepOrigem=80410220&sCepDestino='+str(cep)+'&nVlPeso='+str(peso)+'&nCdFormato=1&nVlComprimento='+str(comprimento)+'&nVlAltura='+str(altura)+'&nVlLargura='+str(largura)+'&nVlDiametro=0&nCdServico='+str(tipo)+'&nCdEmpresa=&sDsSenha=&sCdMaoPropria=s&nVlValorDeclarado=0&sCdAvisoRecebimento=s&StrRetorno=xml&nIndicaCalculo=3')
         file = urllib.request.urlopen(url)
         data = file.read()
         file.close()

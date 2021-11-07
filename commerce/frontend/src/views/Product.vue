@@ -170,7 +170,12 @@ export default {
         postCep(){
             
             axios
-                .post('/api/frete/?cep='+ this.cep +'&tipo='+ this.tipo+'&peso='+ this.product.peso)
+                .post('/api/frete/?cep='+this.cep+
+                '&tipo='+this.tipo+
+                '&peso='+this.product.peso+
+                '&altura='+this.product.altura+
+                '&largura='+this.product.largura+
+                '&comprimento='+this.product.comprimento)
                 .then(response => {
                     this.dadosFrete = response.data
                     const valorProduct = parseFloat(String(this.product.get_price).replace(',', '.'))
