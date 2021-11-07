@@ -1,20 +1,19 @@
 <template>
     <div class="page-my-account">
-        <div class="columns is-multiline ">
-            <br>
+        <div class="columns is-multiline">
+            <hr>
             <div class="column is-12">
                 <h1 class="title has-text-white">Minha Conta</h1>
             </div>
             <br>
-            <div class="column is-12">
-                <button @click="logout()" class="button is-danger">Sair</button>
+            <div class="column is-2">
+                <button @click="logout()" class="button is-danger btn">Sair</button>
             </div>
-
+            
             <hr>
             <br>
             <div class="column is-12">
                 <h2 class="subtitle has-text-white">Minhas Ordens</h2>
-
                 <OrderSummary
                     v-for="order in orders"
                     v-bind:key="order.id"
@@ -26,9 +25,7 @@
 
 <script>
 import axios from 'axios'
-
 import OrderSummary from '@/components/OrderSummary.vue'
-
 export default {
     name: 'MyAccount',
     components: {
@@ -77,5 +74,9 @@ export default {
 .page-my-account {
     min-width: 70vw;
     min-height: 100vh;
+    margin-top: 10vh;
+}
+.btn {
+    width: 150px;
 }
 </style>

@@ -25,8 +25,7 @@ SECRET_KEY = 'django-insecure-yfz--s)0+4lv7s7v7(m&0mjno(+!h)5^_fwagap)%9^#f7l%wx
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['192.168.0.106',
-                 '127.0.0.1']
+ALLOWED_HOSTS = []
 
 STRIPE_SECRET_KEY = 'sk_test_51JIEEtHOerXKUuqW24ydk29d9kea4EyMRQXIkFouTlUq6Gl2QwguBfC7KnoN2JX2bhFaDdR70UxUuVrIKWxtas5y00YmGLexFC'
 
@@ -35,6 +34,7 @@ STRIPE_SECRET_KEY = 'sk_test_51JIEEtHOerXKUuqW24ydk29d9kea4EyMRQXIkFouTlUq6Gl2Qw
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
+    'django_registration',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
@@ -58,6 +58,27 @@ CORS_ALLOWED_ORIGINS = [
 
 AUTH_USER_MODEL = 'usuarios.User'
 
+ACCOUNT_ACTIVATION_DAYS  =  7
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'wernerpj1@gmail.com'
+EMAIL_HOST_PASSWORD = 'coawhgcfrsiswhdo' #past the key or password app here
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+SERVER_EMAIL = 'Máquinas Ferreira <naoresponda@mydomain.com>'
+DEFAULT_FROM_EMAIL = SERVER_EMAIL
+DJOSER = {
+    'PASSWORD_RESET_CONFIRM_URL': 'password/reset/confirm/{uid}/{token}',
+    'PASSWORD_RESET_CONFIRM_RETYPE': True,
+    'EMAIL': {
+        'password_reset': 'djoser.email.PasswordResetEmail'
+    }
+} 
+REST_FRAMEWORK = {
+   'DEFAULT_AUTHENTICATION_CLASSES': (
+       'rest_framework.authentication.TokenAuthentication',
+   ),
+}
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -74,7 +95,10 @@ ROOT_URLCONF = 'commerce.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [
+            BASE_DIR,
+            BASE_DIR.joinpath('templates'),
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

@@ -31,16 +31,23 @@
                         <p v-for="error in errors" v-bind:key="error">{{ error }}</p>
                     </div>
 
-                    <div class="field">
-                        <div class="control">
+                    <div class="field columns">
+                        <div class="control column">
                             <button class="button is-dark has-text-white">Entrar</button>
                         </div>
+                        
                     </div>
-
+                     
+                    <div class="column is-12" v-if="isHidden">
+                        <reset-password/>
+                    </div>
                     <hr>
 
                     <label for="" class="has-text-white">   Ou <router-link to="/sign-up">clique aqui</router-link> para se cadastrar!</label>
                 </form>
+                <div class="control column">
+                    <button v-on:click="isHidden = !isHidden" class="button is-danger btn">Mudar senha</button>                
+                </div>
             </div>
         </div>
     </div>
@@ -48,15 +55,19 @@
 
 <script>
 import axios from 'axios'
-
+import ResetPassword from '../components/resetPassword.vue'
 export default {
     name: 'LogIn',
     data() {
         return {
             email: '',
             password: '',
-            errors: []
+            errors: [],
+            isHidden: false,
         }
+    },
+    components: {
+        ResetPassword
     },
     mounted() {
         document.title = 'Logar - Máquinas Ferreira'
@@ -86,7 +97,7 @@ export default {
                     const toPath = this.$route.query.to || '/cart'
 
                     this.$router.push(toPath)
-                    console.log(this.username)
+                    
                 })
                 .catch(error => {
                     if (error.response) {

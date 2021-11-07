@@ -8,16 +8,29 @@ from rest_framework.decorators import api_view
 from rest_framework import status, authentication, permissions
 from rest_framework.decorators import api_view, authentication_classes, permission_classes
 
+
 @api_view(['POST'])
+@authentication_classes([authentication.TokenAuthentication])
+@permission_classes([permissions.IsAuthenticated])
+def post_service(request):    
+    serializer = ServiceOrderSerializer(data=request.data)
+    if serializer.is_valid():
+        try:
+            serializer.save(user=request.user)
+            return Response(status=status.HTTP_201_CREATED)
+        except Exception:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+    return Response(status=status.HTTP_400_BAD_REQUEST)
 
-def post_service(request):
-
-    
-    serializer = ServiceOrderSerializer(data=request.data, many=True)
-    try:
-        if serializer.is_valid():
-
-            return Response(print(serializer.data), status=status.HTTP_201_CREATED)
-    except Exception as e:
-        print(e)
-        
+@api_view(['POST'])
+@authentication_classes([authentication.TokenAuthentication])
+@permission_classes([permissions.IsAuthenticated])
+def post_sugestion(request):    
+    serializer = SugestionSerializer(data=request.data)
+    if serializer.is_valid():
+        try:
+            serializer.save(user=request.user)
+            return Response(status=status.HTTP_201_CREATED)
+        except Exception:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    return Response(serializer.errors ,status=status.HTTP_400_BAD_REQUEST)

@@ -47,8 +47,7 @@ Aqui você tem a garantia dos melhores serviços do mercado!</p>
             <button class="button is-link">Entrar</button>
         </div>
         </form>
-        <form action="" v-if="$store.state.isAuthenticated" @submit.prevent="submitService">
-        <div class="field">
+        <div class="field" v-if="$store.state.isAuthenticated">
         <label class="label has-text-white">Assunto</label>
         <div class="control">
             <div class="select" :class="orderService == '' ? 'is-danger':''">
@@ -61,50 +60,59 @@ Aqui você tem a garantia dos melhores serviços do mercado!</p>
         </div>
         </div>
         <br>
-        <div class="field" v-if="orderService==='Assistência'">
-        <label class="label has-text-white" >Endereço</label>
-        <input type="text" class="input" v-model="address">
-        </div>
-        <div class="field" v-if="orderService==='Assistência'">
-        <label class="label has-text-white" >CEP</label>
-        <input type="tel" class="input" v-model="zipcode">
-        </div>
-        <div class="field" v-if="orderService==='Assistência'">
-        <label class="label has-text-white" >Ponto de referência</label>
-        <input type="tel" class="input" v-model="place">
-        </div>
-        <div class="field" v-if="orderService==='Assistência'">
-        <label class="label has-text-white" >Telefone</label>
-        <input type="tel" class="input" v-model="phone">
-        <label class="label has-text-white" >Modelo da máquina</label>
-        <input type="text" class="input" v-model="product">
-        </div>
-        <div class="field" >
-        <label class="label has-text-white">Mensagem</label>
-        <div class="control">
-            <textarea class="textarea" placeholder="Textarea" v-model="txService"></textarea>
-        </div>
-        </div>
+        <form v-if="$store.state.isAuthenticated && orderService==='Assistência'" @submit.prevent="submitService">
+            <div class="field">
+            <label class="label has-text-white" >Endereço</label>
+            <input type="text" class="input" v-model="address">
+            </div>
+            <div class="field">
+            <label class="label has-text-white" >CEP</label>
+            <input type="tel" class="input" v-model="zipcode">
+            </div>
+            <div class="field">
+            <label class="label has-text-white" >Ponto de referência</label>
+            <input type="tel" class="input" v-model="place">
+            </div>
+            <div class="field">
+            <label class="label has-text-white" >Telefone</label>
+            <input type="tel" class="input" v-model="phone">
+            <label class="label has-text-white" >Modelo da máquina</label>
+            <input type="text" class="input" v-model="product">
+            </div>
+            <div class="field" >
+            <label class="label has-text-white">Mensagem</label>
+            <div class="control">
+                <textarea class="textarea" placeholder="Textarea" v-model="txService"></textarea>
+            </div>
+            </div>
 
-        <div class="field" >
-        <div class="control">
-            <label class="checkbox">
-            <input type="checkbox">
-            Eu concordo <a href="#">termos e condições</a>
-            </label>
-        </div>
-        </div>
-        <div class="field is-grouped" >
-        <div class="control">
-            <button class="button is-link" @click="submitService()">Enviar</button>
-        </div>
-        <div class="control">
-            <button class="button is-link is-light">Cancelar</button>
-        </div>
-        </div>
+            <div class="field is-grouped" >
+            <div class="control">
+                <button class="button is-link">Enviar</button>
+            </div>
+            <div class="control">
+                <button class="button is-link is-light">Cancelar</button>
+            </div>
+            </div>
         </form>
-        
+        <form v-else-if="$store.state.isAuthenticated && orderService==='Sugestões'" @submit.prevent="submitSugestion">
+            <div class="field" >
+            <label class="label has-text-white">Mensagem</label>
+            <div class="control">
+                <textarea class="textarea" placeholder="Insira sua sugestão" v-model="txService"></textarea>
+            </div>
+            </div>
 
+            <div class="field is-grouped" >
+            <div class="control">
+                <button class="button is-link">Enviar</button>
+            </div>
+            <div class="control">
+                <button class="button is-link is-light">Cancelar</button>
+            </div>
+            </div>
+        </form>
+              
 </div>
 
 </div>           
@@ -162,12 +170,13 @@ export default {
             await axios
                 .post("/api/token/login/", formData)
                 .then(response => {
+                    const user = this.email
                     const token = response.data.auth_token
-
                     this.$store.commit('setToken', token)
-                    
+                    this.$store.commit('setUser', this.email)
+                    axios.defaults.headers.common["Authorization"] = "Token " + token
                     localStorage.setItem("token", token)
-
+                    localStorage.setItem("username", user)
                 })
                 .catch(error => {
                     if (error.response) {
@@ -200,9 +209,10 @@ export default {
                         type: 'is-success',
                         dismissible: true,
                         pauseOnHover: true,
-                        duration: 2000,
+                        duration: 5000,
                         position: 'bottom-right',
                     })
+                    this.$router.push('/')
                 })
                 .catch(error => {
                     console.log(error)
@@ -216,6 +226,35 @@ export default {
                     })
                 })   
              
+        },
+        submitSugestion() {
+            const data = {
+                'sugestao': this.txService,
+            }
+            axios 
+                .post('/api/sugestao/', data)
+                .then(response => {
+                    toast({
+                        message: response.data + 'Sugestão cadastrada com sucesso. Entraremos em contato em até 48h ',
+                        type: 'is-success',
+                        dismissible: true,
+                        pauseOnHover: true,
+                        duration: 5000,
+                        position: 'bottom-right',
+                    })
+                    this.$router.push('/')
+                })
+                .catch(error => {
+                    console.log(error)
+                    toast({
+                        message: 'Ops algo errado. Por favor tente novamente.',
+                        type: 'is-danger',
+                        dismissible: true,
+                        pauseOnHover: true,
+                        duration: 2000,
+                        position: 'bottom-right',
+                    })
+                })   
         }
 
 }  

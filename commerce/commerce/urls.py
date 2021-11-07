@@ -17,17 +17,26 @@ from django.conf import settings
 
 from django.contrib import admin
 from django.urls import path, include
+from django.conf.urls import url
 from django.conf.urls.static import static
+
+from usuarios import views
+import usuarios
 
 
 
 urlpatterns = [
+
     path('admin/', admin.site.urls),
+    path('api/accounts', include('django_registration.backends.activation.urls')),
+    path('api/', include('django.contrib.auth.urls')),
     path('api/', include('djoser.urls')),
     path('api/', include('djoser.urls.authtoken')),
     path('api/', include('ecomm.urls')),
     path('api/', include('order.urls')),
     path('api/', include('assistencia.urls')),
+    path('api/', include('usuarios.urls')),
+    path('password/reset/confirm/<uidb64>/<token>/', usuarios.views.changePassword),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 

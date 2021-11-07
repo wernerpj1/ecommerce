@@ -12,6 +12,7 @@ import MyAccount from '../views/MyAccount.vue'
 import BrandsView from '../views/BrandsView.vue'
 import Checkout from '../views/Checkout.vue'
 import Success from '../views/Success.vue'
+import SignupActivate from '../views/SignupActivate'
 
 const routes = [
   {
@@ -38,9 +39,14 @@ const routes = [
     component: Success
   },
   {
-    path: '/log-in',
+    path: '/login',
     name: 'LogIn',
     component: LogIn
+  },
+  {
+    path: '/activate/:uidb64/:token/',
+    name: 'SignupActivate',
+    component: SignupActivate
   },
   {
     path: '/sign-up',

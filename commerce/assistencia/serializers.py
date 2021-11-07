@@ -10,6 +10,7 @@ class ServiceOrderSerializer(serializers.ModelSerializer):
     class Meta:
         model = ServiceOrder
         fields = (
+            "id",
             "address",
             "zipcode",
             "place",  
@@ -23,7 +24,7 @@ class SugestionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Sugestion
         fields = (
-            "user",
+            "id",
             "sugestao",
             "created_at",
         )

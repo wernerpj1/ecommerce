@@ -5,6 +5,7 @@
                 <h1 class="title has-text-white">Cadastre-se</h1>
 
                 <form @submit.prevent="submitForm">
+                      
                     <div class="field">
                     <label class="label has-text-white">Email</label>
                     <div class="control has-icons-left has-icons-right">
@@ -22,7 +23,7 @@
                     <div class="field">
                         <label class=" has-text-white">Senha</label>
                         <div class="control">
-                            <input type="password" class="input" v-model="password">
+                            <input type="password" class="input" v-model="password1">
                         </div>
                     </div>
 
@@ -45,7 +46,7 @@
 
                     <hr>
 
-                    <p class="has-text-white"> Ou <router-link to="/log-in">clique aqui</router-link> para entrar! </p>
+                    <p class="has-text-white"> Ou <router-link to="/login">clique aqui</router-link> para entrar! </p>
                 </form>
             </div>
         </div>
@@ -61,36 +62,46 @@ export default {
     data() {
         return {
             email: '',
-            password: '',
+            password1: '',
             password2: '',
             errors: []
         }
     },
     methods: {
-        submitForm() {
+        async submitForm() {
+            this.$store.commit('setIsLoading', true) 
+
             this.errors = []
 
             if (this.email === '') {
                 this.errors.push('O e-mail de cadastro está faltando')
             }
 
-            if (this.password === '') {
+            if (this.password1 === '') {
                 this.errors.push('A senha é muito curta')
             }
 
-            if (this.password !== this.password2) {
+            if (this.password1 !== this.password2) {
                 this.errors.push('As senhas devem ser iguais')
             }
 
             if (!this.errors.length) {
                 const formData = {
+                    
                     email: this.email,
-                    password: this.password
+                    password1: this.password1,
+                    password2: this.password2
                 }
-
-                axios
-                    .post("/api/users/", formData)
+                const config = {
+                  headers: {
+                    'Content-Type': 'application/json'
+                  }
+                }
+             await axios
+                    
+                    .post("/api/signup/", formData, config)
                     .then(response => {
+                        
                         toast({
                             message: 'Conta criada, por favor faça o Log-in!',
                             type: 'is-success',
@@ -100,7 +111,7 @@ export default {
                             position: 'bottom-right',
                         })
 
-                        this.$router.push('/log-in')
+                        this.$router.push('/login')
                     })
                     .catch(error => {
                         if (error.response) {
@@ -116,6 +127,7 @@ export default {
                         }
                     })
             }
+             this.$store.commit('setIsLoading', false)
         }
     }
 }
